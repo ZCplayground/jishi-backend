@@ -14,6 +14,7 @@ class CreateRecordsTable extends Migration
     public function up()
     {
         Schema::create('records', function (Blueprint $table) {
+            // 表名：records，存放推荐记录
             $table->increments('id');
             $table->timestamps();
         });
