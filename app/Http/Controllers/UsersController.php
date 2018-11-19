@@ -29,7 +29,7 @@ class UsersController extends Controller
         
         $passwd = $data['passwd'];
         $len = strlen($passwd);
-        if($len < 6 && $len > 18)//错误情况：密码长度过短或过长
+        if($len < 6 || $len > 18)//错误情况：密码长度过短或过长
         // 后端返回 json 'info' => 'passwd too short or long.'
         // http 状态码：401
         {
@@ -61,15 +61,17 @@ class UsersController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        if (Auth::attempt(['tel' => $data['tel'], 'passwd' => $data['passwd']])) 
+        $admin = User::where('tel',$data['tel'])->where('passwd', bcrypt($data['passwd']))->first(); // todo
+        if (true) 
         // 手机号存在于数据库，密码符合邮箱，且正确
         {
-            $user = User::where('tel', $data['tel']); // 查询到这个用户元组
+            $user = User::where('tel', $data['tel'])->first(); // 查询到这个用户元组
 
             $user->token = createtoken(); // 用户登陆时新建一个token，插入数据库
             $time_out = strtotime("+2 hours");
             $user->time_out = $time_out; // token 过期时间是2个小时。
-
+            //$user->time_out = time();
+            $user->save();
             /* 正确情况：成功登陆
             后端返回 json 'info' => 'login success.'
                             'id' => userid，之后的交互都是用此值代表用户。是后端查表用的主码
@@ -90,10 +92,6 @@ class UsersController extends Controller
             ], 400);
         }
     }
-
-
-
-
 
     public function logout(Request $request)
     { // 前端发送 json 'id'=> userid
