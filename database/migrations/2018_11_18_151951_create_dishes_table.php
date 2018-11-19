@@ -19,7 +19,7 @@ class CreateDishesTable extends Migration
             $table->increments('id');// id     |菜品id       |从1递增的正整数  |主码。处理数据时注意录入顺序
             $table->string('name');  // name   |菜名         |string|无
             $table->boolean('spicy');// spicy  |是否辣       | bool，辣为true，不辣为false。下属bool类型属性均相似，省略 |无
-            $table->boolean('nutritious'); //Nutritious|是否属于营养均衡食品|bool|无
+            $table->boolean('balance'); //balance|是否属于营养均衡食品|bool|无
             $table->boolean('oil');  // oil    |是否属于油脂过高食品|bool|无
             $table->boolean('seafood'); // seafood|是否包含海鲜类食品|bool|无
             $table->boolean('rice');  // rice  |是否为米饭    |bool| rice, noodles, mifen 这三个bool类型属性有且只有一个为真
