@@ -32,3 +32,5 @@ Route::post('/login','UsersController@login')->name('login');
 Route::delete('/logout','UsersController@logout')->name('logout');
 Route::post('/password_forget','UsersController@passwdForget')->name('passwdForget');
 Route::post('/password_reset','UsersController@passwdReset')->name('passwdReset');
+
+Route::get('/recommend', 'RecommendController@recommend')->name('recommend');

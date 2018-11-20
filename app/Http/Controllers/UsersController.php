@@ -63,6 +63,7 @@ class UsersController extends Controller
         $data = json_decode($data, true);
 
         $admin = User::where('tel',$data['tel'])->where('passwd', bin2hex(hash('sha256',$data['passwd'], true)))->first();
+
         if ($admin) 
         // 手机号存在于数据库，密码符合邮箱，且正确
         {
