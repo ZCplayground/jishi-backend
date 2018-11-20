@@ -34,3 +34,13 @@ Route::post('/password_forget','UsersController@passwdForget')->name('passwdForg
 Route::post('/password_reset','UsersController@passwdReset')->name('passwdReset');
 
 Route::post('/recommend', 'RecommendController@recommend')->name('recommend');
+
+/*
+QuestionsController
+
+功能|url|http方法|接口
+---|---|---|---
+请求问题|/question_request|post|
+用户回答完毕，提交答案，后端返回推荐结果|/recommendation|post|
+用户返回评价|/record_store|post
+*/

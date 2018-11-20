@@ -16,7 +16,7 @@ class UsersController extends Controller
         $data = json_decode($data, true);
        
         // 查看该手机号是否已经被注册。
-        $duplicate = User::where('tel',$data['tel'])->first();
+        $duplicate = User::where('tel', $data['tel'])->first();
         
         if($duplicate != null) //错误情况：该手机号已经被注册
         // 后端返回 json 'info' => 'tel number exists.'
@@ -44,7 +44,6 @@ class UsersController extends Controller
         $user = User::create([ // 存入数据库
             'tel' => $data['tel'],
             'newhere' => true,
-            //'passwd' => bcrypt($data['passwd']),
             'passwd' => bin2hex(hash('sha256',$data['passwd'], true)),
             'token' => $token,
             'time_out' => time(),
