@@ -44,7 +44,8 @@ class UsersController extends Controller
         $user = User::create([ // 存入数据库
             'tel' => $data['tel'],
             'newhere' => true,
-            'passwd' => bcrypt($data['passwd']),
+            //'passwd' => bcrypt($data['passwd']),
+            'passwd' => bin2hex(hash('sha256',$data['passwd'], true)),
             'token' => $token,
             'time_out' => time(),
         ]);
@@ -61,8 +62,8 @@ class UsersController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $admin = User::where('tel',$data['tel'])->where('passwd', bcrypt($data['passwd']))->first(); // todo
-        if (true) 
+        $admin = User::where('tel',$data['tel'])->where('passwd', bin2hex(hash('sha256',$data['passwd'], true)))->first();
+        if ($admin) 
         // 手机号存在于数据库，密码符合邮箱，且正确
         {
             $user = User::where('tel', $data['tel'])->first(); // 查询到这个用户元组
