@@ -99,10 +99,11 @@ class UsersController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $user = User::where('id', $data['id']);
+        $user = User::where('id', $data['id'])->first();
         if($user)
         {
             $user->time_out = time(); // token超时时间设定为当下时间，之后token验证必定超时，实现登出。
+            $user->save();
              // 成功登出返回http 200
             return response()->json([
                 'info' => 'logout success.'
@@ -123,13 +124,18 @@ class UsersController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $user = User::where('tel', $data['tel']);
+        $user = User::where('tel', $data['tel'])->first();
         if($user)
         {
-            // 该手机号存在。返回id和http 200
+            // 该手机号存在。重新生成一个token，
+            // 返回id、token和http 200
+            $user->token = createtoken();
+            $user->time_out = time() + 120; // 修改密码两分钟内有效
+            $user->save();
             return response()->json([
                 'info' => 'user exists.',
-                'id' => $user->id
+                'id' => $user->id,
+                'token' => $user->token
             ], 200);
         }
         else
@@ -142,26 +148,45 @@ class UsersController extends Controller
 
     // 忘记密码第二步：密码改为新密码
     public function passwdReset(Request $request)
-    { /* 前端发送 json 'id' => userid
+    { /* 前端发送 json 'id' => userid,
+                       'token' => token,
                       'passwd' => 新密码
         */
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $user = User::where('id', $data['id']);
-        if($user)
+        $ret = checktoken($data['id'], $data['token']);
+        if($ret === 'iderror')
         {
-            $user->passwd = bcrypt($request->passwd);
-            // 成功修改密码。返回http 200
-            return response()->json([
-                'info' => 'user exists.'
-            ], 200);
-        }
-        else
-        {   // user id 错误。返回http 400
+            // user id 错误。返回http 400
             return response()->json([
                 'info' => 'user id does not exist.'
             ], 400);
+        }
+        else if($ret === 'tokenerror')
+        {
+            // token 有误。
+            return response()->json([
+                'info' => 'token error.'
+            ], 401);
+        }
+        else if($ret === 'timeout')
+        {
+            // token 超时。
+            return response()->json([
+                'info' => 'token time out.'
+            ], 402);
+        }
+        else if($ret === 'success')
+        {
+            // token验证成功
+            $user = User::where('id', $data['id'])->first();
+            $user->passwd = bin2hex(hash('sha256',$data['passwd'], true));
+            $user->save();
+            // 成功修改密码。返回http 200
+            return response()->json([
+                'info' => 'reset password success.'
+            ], 200);
         }
     }
 }
