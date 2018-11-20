@@ -24,25 +24,27 @@ class RecommendController extends Controller
         $ans = $request->ans;
         trim($ans,"[]");
         $ans = explode(",",$ans);
+
+
         $attrs = [];
         $values = [];
-        $questionnum = count($idQuestions);
-
+        $questionNum = count($idQuestions);
         $attrList = ['spicy','balance','oil','seafood','rice','noodles','mifen'];
         $attrUsed = [0,0,0,0,0,0,0];
-        for ($i=0; $i<$questionnum;$i++)
+        for ($i=0; $i<$questionNum;$i++)
         {
         // select 'attr' and 'choice' from Question where id = $idQuestion;
             $questionAttr = Question::where('id', $idQuestions[$i])->select('attr','choice')->first();
             $attrs[$i] = $questionAttr->attr;
             if ($ans[$i] == 'y')
             {
-                $attrs[$i] = $questionAttr->choice;
                 $attrUsed[array_search($attrs[$i], $attrList)] = 1;
+                $values[array_search($attrs[$i], $attrList)] = $questionAttr->choice;
             }
             else
             {
-                $values[$i] = ~$questionAttr->choice;
+                $attrUsed[array_search($attrs[$i], $attrList)] = 1;
+                $values[array_search($attrs[$i], $attrList)] = (int)!($questionAttr->choice);
             }
         }
 
