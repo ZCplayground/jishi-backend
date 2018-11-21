@@ -64,7 +64,7 @@ class QuestionsController extends Controller
             $third_question = Question::where('attr',$third)->select('id','content')->offset($second_qnum-1)->limit(1)->first();
             //返回问题
 
-            //根据前两个问题序号调整顺序
+            //根据前两个问题序号，调整顺序
             if($first_question->id>$second_question->id)
             {
                 $temp = $second_question->id;
@@ -77,7 +77,7 @@ class QuestionsController extends Controller
             }
 
 
-            $question_id_list = "$first_question->id,$second_question->id,$third_question->id";
+            $question_id_list = "$first_question->id,$second_question->id,$third_question->id"; //生成问题id列表
 
             // 返回question_id_list,三个问题,http 201
             return response()->json([
