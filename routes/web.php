@@ -17,6 +17,7 @@ Route::get('/about', 'StaticPagesController@about');
 
 // 从.csv文件中导入信息到数据库
 Route::get('/questions_import','StaticPagesController@importQuestions')->name('importQuestions');
+Route::get('/dishes_import','StaticPagesController@importDishes')->name('importDishes');
 
 
 /* 
