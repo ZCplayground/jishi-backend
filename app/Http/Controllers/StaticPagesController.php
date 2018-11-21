@@ -23,7 +23,7 @@ class StaticPagesController extends Controller
 
     public function importQuestions() // 导入问题
     {
-        $file = fopen("./questions.csv","r"); // 放在 public 文件夹
+        $file = fopen("questions.csv","r"); // 放在 public 文件夹
 
         while(!feof($file))
         {
