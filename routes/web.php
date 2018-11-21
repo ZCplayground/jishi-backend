@@ -44,3 +44,5 @@ QuestionsController
 用户回答完毕，提交答案，后端返回推荐结果|/recommendation|post|
 用户返回评价|/record_store|post
 */
+
+Route::post('/question_request', 'QuestionsController@questionRequest')->name('questionRequest');
