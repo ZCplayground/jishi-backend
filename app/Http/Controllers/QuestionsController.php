@@ -45,7 +45,7 @@ class QuestionsController extends Controller
 
             $Dimension = 7 ;                //定义维度数目为7
             $Dimension_other =4 ;           //定义非主食问题的维度为4
-            $attr = ['spicy','balance','oil','seafood','rice','noodles','mifen'];
+            $attr = ['','spicy','balance','oil','seafood','rice','noodles','mifen'];
 
             $front_two = range(1,$Dimension_other);  //利用range()函数产生一个1到$Dimension_other的数组
             shuffle($front_two);            //利用shuffle()函数将产生的数组随机打乱顺序
