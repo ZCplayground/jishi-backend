@@ -45,23 +45,25 @@ class QuestionsController extends Controller
 
             $Dimension = 7 ;                //定义维度数目为7
             $Dimension_other =4 ;           //定义非主食问题的维度为4
-
+            $attr = ['spicy','balance','oil','seafood','rice','noodles','mifen'];
 
             $front_two = range(1,$Dimension_other);  //利用range()函数产生一个1到$Dimension_other的数组
             shuffle($front_two);            //利用shuffle()函数将产生的数组随机打乱顺序
 
-            $first_qnum = rand(1,Question::where('attr', $front_two[0])->count());  //获取维度问题数目后，随机该维度下的某个问题
-            $first_question = Question::where('attr',$front_two[0])->select('id','content')->offset($first_qnum-1)->limit(1)->first(); 
+
+
+            $first_qnum = rand(1,Question::where('attr', $attr[$front_two[0]])->count());  //获取维度问题数目后，随机该维度下的某个问题
+            $first_question = Question::where('attr',$attr[$front_two[0]])->select('id','content')->offset($first_qnum-1)->limit(1)->first(); 
             //返回问题
 
-            $second_qnum = rand(1,Question::where('attr', $front_two[1])->count()); //获取维度问题数目后，随机该维度下的某个问题
-            $second_question = Question::where('attr',$front_two[1])->select('id','content')->offset($second_qnum-1)->limit(1)->first();
+            $second_qnum = rand(1,Question::where('attr', $attr[$front_two[1]])->count()); //获取维度问题数目后，随机该维度下的某个问题
+            $second_question = Question::where('attr',$attr[$front_two[1]])->select('id','content')->offset($second_qnum-1)->limit(1)->first();
             //返回问题
 
             $third = rand(1,$Dimension-$Dimension_other) + $Dimension_other;
 
-            $third_qnum = rand(1,Question::where('attr', $third)->count()); //获取维度问题数目后，随机该维度下的某个问题
-            $third_question = Question::where('attr',$third)->select('id','content')->offset($second_qnum-1)->limit(1)->first();
+            $third_qnum = rand(1,Question::where('attr', $attr[$third])->count()); //获取维度问题数目后，随机该维度下的某个问题
+            $third_question = Question::where('attr',$attr[$third])->select('id','content')->offset($third_qnum-1)->limit(1)->first();
             //返回问题
 
             //根据前两个问题序号，调整顺序
