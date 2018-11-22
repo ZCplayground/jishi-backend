@@ -25,7 +25,7 @@ class CreateDishesTable extends Migration
             $table->boolean('rice');  // rice  |是否为米饭    |bool| rice, noodles, mifen 这三个bool类型属性有且只有一个为真
             $table->boolean('noodles');// noodles |是否为面条 |bool|
             $table->boolean('mifen'); // mifen  |是否为米粉   |bool| 我佛了，为什么要把米粉和面条分开。还有为什么没有汉堡的类别，我要吃垃圾食品！！！！
-            $table->double('satisfaction'); //satisfaction|满意度|double|推荐这道菜的record的数量，其中确定为满意的比例
+            $table->double('satisfaction')->nullable(); //satisfaction|满意度|double|推荐这道菜的record的数量，其中确定为满意的比例
             $table->timestamps();
         });
     }
