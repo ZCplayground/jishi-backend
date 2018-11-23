@@ -14,7 +14,8 @@ class MapController extends Controller
 
 
     	$restaurants=Restaurant::select('name','longitude','latitude')->get();
-
+    	// $restaurants = trim($restaurants, "\xEF\xBB\xBF");
+    	
     	//返回所有商家的 {name,longitude,latitude},http 201
 
     	return response()->json(
