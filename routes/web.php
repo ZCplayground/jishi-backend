@@ -40,6 +40,7 @@ Route::post('/password_forget','UsersController@passwdForget')->name('passwdForg
 Route::post('/password_reset','UsersController@passwdReset')->name('passwdReset');
 
 Route::post('/recommend', 'RecommendController@recommend')->name('recommend');
+Route::post('/save_record','RecommendController@saveRecords')->name('saveRecord');
 
 /*
 QuestionsController

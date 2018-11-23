@@ -23,7 +23,7 @@ class CreateRecordsTable extends Migration
             $table->string('dish_id_list');         // dish_id_list     |推荐记录  |stirng          |用逗号隔开的推荐的菜点id，形如:"5,123,234"
             $table->integer('finalchoice')->unsigned()->nullable();
                                                     // finalchoice      |最后用户选择了那道菜|unsigend int|用户按下“带我去”这个按钮时选择的是哪道菜，最后对此进行好评或差评。是dish id的外码。
-            $table->boolean('judge');               // judge            |好评或差评 |bool           |好评true，差评false
+            $table->boolean('judge')->nullable();   // judge            |好评或差评 |bool           |好评true，差评false
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

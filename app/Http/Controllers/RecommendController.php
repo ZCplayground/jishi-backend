@@ -123,4 +123,27 @@ class RecommendController extends Controller
         // return response($dishes->toJson())
         //     ->header('content-type','application/json');
     }
+
+    function saveRecords(Request $request)
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $usrId=$data['idUser'];
+        $queId=$data['idQuestions'];
+        $ans=$data['ans'];
+        $dishId=$data['idDishs'];
+        
+        
+        $record=Record::create([ // 存入数据库
+            'user_id' => $usrId,
+            'question_id_list' => $queId,
+            'answer_list' => $ans,
+            'dish_id_list' => $dishId,
+        ]);
+
+        return response()->json(
+            ['idRecommend' => $record->id]
+        );    
+    }
 }

@@ -108,4 +108,6 @@ class StaticPagesController extends Controller
 
         return $ret1.$ret2.$ret3;
     }*/
+	
+
 }
