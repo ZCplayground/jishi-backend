@@ -146,4 +146,26 @@ class RecommendController extends Controller
             ['idRecommend' => $record->id]
         );    
     }
+
+    function storeRecords(Request $request){
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+        $usrtoken=$data['token'];
+        $usrid=$data['idUser'];
+        $recordid=$data['idRecord'];
+        $finalChoice=$data['finalChoice'];
+        $judge=$data['judge']=='true'? 1 : 0;
+        $record=Record::where('id',$recordid)->update(['finalchoice'=>$finalChoice,'judge'=>$judge]);
+        
+        if ($record == null){
+            return response()->json(
+                ['msg' => "save failed"]
+            );    
+        }
+        else{
+            return response()->json(
+                ['msg' => "save sucessfully"]
+            );   
+        }
+    }
 }
