@@ -52,3 +52,14 @@ QuestionsController
 */
 
 Route::post('/question_request', 'QuestionsController@questionRequest')->name('questionRequest');
+
+
+/*
+MapController
+功能|url|http方法|接口
+---|---|---|---
+返回餐厅位置|/map_request|get|
+*/
+
+
+Route::get('/map_request','MapController@mapRequest')->name('mapRequest');
