@@ -29,9 +29,7 @@ class RecommendController extends Controller
                 'dish_id_list' => $dishId,
             ]);
     
-            return response()->json(
-                ['idRecommend' => $record->id]
-            );    
+            return $record->id;    
         }
         
 
@@ -164,12 +162,6 @@ class RecommendController extends Controller
                 }
             }
     
-            $recordData = [];
-            $recordData['dishes'] = $recommends;
-            $recordData['hopeDishesNumber'] = 5;// to do: change the port 
-            $recordData['ans'] = $request->ans;
-            $recordData['idQuestions'] = $request->idQuestions;
-    
             
             $saveData = [];
             $saveData['idUser'] = $data['id'];
@@ -178,8 +170,9 @@ class RecommendController extends Controller
             $saveData['idDishes'] = $idDishes;
 
             // except for $finalChoice
-            saveRecords($saveData);
-    
+            $idRecord = saveRecords($saveData);
+            $recommends['idRecord'] = $idRecord;
+
             return $recommends;
             // return response($dishes->toJson())
             //     ->header('content-type','application/json');
