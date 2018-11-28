@@ -217,12 +217,12 @@ class RecommendController extends Controller
             
             if ($record == null){
                 return response()->json(
-                    ['info' => "save failed"]
+                    ['info' => "save failed"],403
                 );    
             }
             else{
                 return response()->json(
-                    ['info' => "save sucessfully"]
+                    ['info' => "save sucessfully"],200
                 );   
             }
         }
