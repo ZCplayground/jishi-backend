@@ -15,7 +15,8 @@ class RecommendController extends Controller
     {  
         function saveRecords($data)
         {
-    
+            
+            
             $usrId=$data['idUser'];
             $queId=$data['idQuestions'];
             $ans=$data['ans'];

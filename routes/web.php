@@ -63,3 +63,5 @@ MapController
 
 
 Route::get('/map_request','MapController@mapRequest')->name('mapRequest');
+
+Route::get('/dishRank','BetaController@dishRank')->name('dishRank');

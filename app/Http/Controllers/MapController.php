@@ -9,7 +9,7 @@ use App\Models\Restaurant;
 
 class MapController extends Controller
 {
-       public function mapRequest()
+    public function mapRequest()
     {
 
 
