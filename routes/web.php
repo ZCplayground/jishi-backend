@@ -65,3 +65,22 @@ MapController
 Route::get('/map_request','MapController@mapRequest')->name('mapRequest');
 
 Route::get('/dishRank','BetaController@dishRank')->name('dishRank');
+
+
+// 商家端
+
+// 商家登陆界面
+Route::get('/Merchant_index','PagesController@index')->name('Merchant_index');
+// 用户评论界面
+Route::get('/Merchant_comment','PagesController@comment')->name('Merchant_comment');
+// 商家忘记密码界面
+Route::get('/Merchant_forget','PagesController@forget')->name('Merchant_forget');
+// 用户分析报告界面
+Route::get('/Merchant_form','PagesController@form')->name('Merchant_form');
+// 商家首页
+Route::get('/Merchant_main','PagesController@main')->name('Merchant_main');
+// 菜品提交界面
+Route::get('/Merchant_menu','PagesController@menu')->name('Merchant_menu');
+// 商家注册界面
+Route::get('/Merchant_register','PagesController@register')->name('Merchant_register');
+
