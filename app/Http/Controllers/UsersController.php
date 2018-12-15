@@ -69,7 +69,7 @@ class UsersController extends Controller
             $user = User::where('tel', $data['tel'])->first(); // 查询到这个用户元组
 
             $user->token = createtoken(); // 用户登陆时新建一个token，插入数据库
-            $time_out = strtotime("+2 hours");
+            $time_out = strtotime("+1 year");
             $user->time_out = $time_out; // token 过期时间是2个小时。
             //$user->time_out = time();
             $user->save();
