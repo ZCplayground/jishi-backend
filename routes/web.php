@@ -63,7 +63,7 @@ MapController
 
 
 Route::get('/map_request','MapController@mapRequest')->name('mapRequest');
-
+Route::post('/clickOnRedPoint','MapController@clickOnRedPoint')->name('clickOnRedPoint');
 
 // BetaController ：存放beta版本的接口
 Route::get('/dishRank','BetaController@dishRank')->name('dishRank'); // 美食排行榜

@@ -65,6 +65,7 @@ class BetaController extends Controller
 
                 $question_id_list = $records[$i]->question_id_list;
                 trim($question_id_list,"[]");
+
                 $question_id_list =explode(",",$question_id_list); // 把问题字符串处理成数组，存放问题id
                 $size = count($question_id_list); // 问题id数组长度（现在是3）
 
@@ -132,5 +133,5 @@ class BetaController extends Controller
             return $history;
         }
     }
-
+    
 }
