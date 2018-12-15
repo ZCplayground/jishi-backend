@@ -64,8 +64,10 @@ MapController
 
 Route::get('/map_request','MapController@mapRequest')->name('mapRequest');
 
-Route::get('/dishRank','BetaController@dishRank')->name('dishRank');
 
+// BetaController ：存放beta版本的接口
+Route::get('/dishRank','BetaController@dishRank')->name('dishRank'); // 美食排行榜
+Route::post('/history', 'BetaController@history')->name('history'); // 返回用户个人历史推荐记录
 
 // 商家端
 
