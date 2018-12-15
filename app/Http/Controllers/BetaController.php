@@ -16,9 +16,16 @@ class BetaController extends Controller
     public function dishRank(){
 
         
-        $what = DB::select('select max(restaurants.name) as restName,max(dishes.name) as dishName,count(finalchoice) as count from restaurants,records, menus,dishes where records.finalchoice = menus.dish_id AND menus.rest_id = restaurants.id AND records.finalChoice = dishes.id group by finalchoice order by count(finalchoice) desc');
+        $rankData = DB::select('select max(restaurants.canteen) as canteenName, max(restaurants.name) as restName, max(dishes.name) as dishName, count(finalchoice) as count from restaurants,records, menus,dishes where records.finalchoice = menus.dish_id AND menus.rest_id = restaurants.id AND records.finalChoice = dishes.id group by finalchoice order by count(finalchoice) desc');
 
-        return $what;
+        $num = count($rankData);
+        
+        if ($num <= 5){
+            return $rankData;
+        }
+        else{
+            return array_slice($rankData,0,5);   
+        }
     }
     
     public function history(Request $request)
@@ -144,4 +151,109 @@ class BetaController extends Controller
 
         return $num;
     }
+
+    
+    public function randRecommend(Request $request)
+    {  
+        function saveRecords($data)
+        {
+            
+            
+            $usrId=$data['idUser'];
+            $queId=$data['idQuestions'];
+            $ans=$data['ans'];
+            $dishId=$data['idDishes'];
+            
+            
+            $record=Record::create([ // 存入数据库
+                'user_id' => $usrId,
+                'question_id_list' => $queId,
+                'answer_list' => $ans,
+                'dish_id_list' => $dishId,
+            ]);
+    
+            return $record->id;    
+        }
+        
+
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+    
+        $ret = checktoken($data['id'], $data['token']);
+        if($ret === 'iderror')
+        {
+            // user id 错误。返回http 400
+            return response()->json([
+                'info' => 'user id does not exist.'
+            ], 400);
+        }
+        else if($ret === 'tokenerror')
+        {
+            // token 有误。
+            return response()->json([
+                'info' => 'token error.'
+            ], 401);
+        }
+        else if($ret === 'timeout')
+        {
+            // token 超时。
+            return response()->json([
+                'info' => 'token time out.'
+            ], 402);
+        }
+        else if($ret === 'success')
+        {
+    
+            $dishes =  DB::table('dishes')
+            ->inRandomOrder()->take(5)->get();
+    
+            
+            $recommends =[];
+            $dishesNum = count($dishes);
+            $recommends['dishNum'] = $dishesNum;
+            $idDishes = "";
+            for ($ii=0;$ii<$dishesNum;$ii++)
+            {
+                $recommend = [];
+                $idDish = $dishes[$ii]->id;
+                $dishName = $dishes[$ii]->name;
+                $idRest = Menu::where('dish_id', $idDish)->first();
+                $idRest = $idRest->rest_id;
+                $resturant = Restaurant::where('id',$idRest)->first();
+                $canteen = $resturant->canteen;
+                $restName = $resturant->name;
+    
+                $recommend['idDish'] = $idDish;
+                $recommend['idRest'] = $idRest;
+                $recommend['restName'] = $restName;
+                $recommend['dishName'] = $dishName;
+                $recommend['canteen'] = $canteen;
+    
+                $recommends['dish'.$ii] = $recommend;
+                
+                if ($ii != $dishesNum - 1)
+                {
+                    $idDishes = $idDishes . $idDish.',';
+                }
+                else
+                {
+                    $idDishes = $idDishes . $idDish;
+                }
+            }
+    
+            
+            $saveData = [];
+            $saveData['idUser'] = $data['id'];
+            $saveData['idQuestions'] = "";
+            $saveData['ans'] = "";
+            $saveData['idDishes'] = $idDishes;
+
+            // except for $finalChoice
+            $idRecord = saveRecords($saveData);
+            $recommends['idRecord'] = $idRecord;
+
+            return $recommends; 
+        }
+    }
+
 }
