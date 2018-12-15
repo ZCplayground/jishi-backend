@@ -26,7 +26,7 @@ function checktoken($id, $token)
             {
                 return 'timeout'; // 长时间未操作，token超时，要重新登陆
             }
-            $new_time_out = time() + 7200; // 更新token时间，7200秒是两小时
+            $new_time_out = time() + 7200000; // 更新token时间，7200秒是两小时
             $user->time_out = $new_time_out; 
             $user->save();
             return 'success'; // token验证成功并刷新时间，可以继续获得接口信息。
