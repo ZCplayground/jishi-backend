@@ -13,10 +13,10 @@ class MapController extends Controller
     {
 
 
-    	$restaurants=Restaurant::select('name','longitude','latitude')->get();
+    	$restaurants=Restaurant::select('id','name','longitude','latitude')->get();
     	// $restaurants = trim($restaurants, "\xEF\xBB\xBF");
     	
-    	//返回所有商家的 {name,longitude,latitude},http 201
+    	//返回所有商家的 {id,name,longitude,latitude},http 202
 
     	return response()->json(
     		$restaurants
