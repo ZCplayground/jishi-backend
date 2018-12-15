@@ -84,7 +84,7 @@ class BetaController extends Controller
                 $dish_id_list = explode(",", $dish_id_list);
                 $size = count($dish_id_list);
                 // 例如189,481,254,80,314 处理成 189 481 254 80 314
-                for($$ii = 0; $ii < $size, $ii++) // 从0~4
+                for($ii = 0; $ii < $size; $ii++) // 从0~4
                 {
                     $one_dish = [];
 
