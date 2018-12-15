@@ -134,4 +134,14 @@ class BetaController extends Controller
         }
     }
     
+    public function statistic(Request $request)
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $records = Record::where('user_id', $data['id'])->get(); // 到数据库中查到这个用户所有的推荐记录
+        $num = count($records); // 推荐记录的总数
+
+        return $num;
+    }
 }
