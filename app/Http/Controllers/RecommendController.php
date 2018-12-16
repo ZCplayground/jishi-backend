@@ -214,7 +214,11 @@ class RecommendController extends Controller
             $recordid=$data['idRecord'];
             $finalChoice=$data['finalChoice'];
             $judge=$data['judge']=='true' ? 1 : 0;
-            $record=Record::where('id',$recordid)->update(['finalchoice'=>$finalChoice,'judge'=>$judge]);
+
+            $restId = Menu::where('dish_id',$finalChoice)->value('rest_id');
+
+            $record = Record::where('id',$recordid)
+                        ->update(['finalchoice'=>$finalChoice,'judge'=>$judge,'rest_id'=>$restId]);
             
             if ($record == null){
                 return response()->json(
