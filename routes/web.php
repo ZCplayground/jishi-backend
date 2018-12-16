@@ -19,6 +19,7 @@ Route::get('/about', 'StaticPagesController@about');
 Route::get('/questions_import','StaticPagesController@importQuestions')->name('importQuestions');
 Route::get('/restaurants_import','StaticPagesController@importRestaurants')->name('importRestaurants');
 Route::get('/dishes_import','StaticPagesController@importDishes')->name('importDishes');
+Route::get('/restaurant_account_import','StaticPagesController@importRestaurantAccount')->name('importRestaurantAccount');
 
 Route::get('/importdata', 'StaticPagesController@importdata')->name('importdata');
 

@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\Dish;
 use App\Models\Restaurant;
 use App\Models\Menu;
+use App\Models\Restaurantaccount;
 
 class StaticPagesController extends Controller
 {
@@ -59,6 +60,23 @@ class StaticPagesController extends Controller
         }
         fclose($file);
         return 'import Restaurants success. ';
+    }
+
+    public function importRestaurantAccount()
+    {
+        $token = createtoken();
+
+        $data['tel'] = 111111;
+        $data['passwd'] = 123456;
+        // 正确情况：成功注册
+        $user = Restaurantaccount::create([ // 存入数据库
+            'tel' => $data['tel'],
+            'rest_id'=>1,
+            'passwd' => bin2hex(hash('sha256',$data['passwd'], true)),
+            'token' => $token,
+            'time_out' => time(),
+        ]);
+        return "import Restaurant Account success.";
     }
 
     public function importDishes() // 导入菜品信息 未完成的函数
