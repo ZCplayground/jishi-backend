@@ -132,7 +132,7 @@ class BetaController extends Controller
                     $judge = "empty";
                 }
                 $record['judge'] = $judge;
-
+                $record['time'] = $records[$i]->created_at;
 
 
                 $history['record'.$i] = $record;
