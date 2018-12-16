@@ -10,8 +10,14 @@
         <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="css/theme.css" rel="stylesheet">
         <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
-        <script src="js/echarts.common.min.js"type="text/javascript"></script>
-
+        <script src="js/echarts.min.js"type="text/javascript"></script>
+        <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+        <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
+        <script src="scripts/common.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -84,67 +90,302 @@
                     <div class="span9">
                         <div class="content">
 
-                            <div class="btn-controls">
-                                <div class="btn-box-row row-fluid">
-                                    <a href="#" class="btn-box big span4"><i class=" icon-user"></i><b>22，333</b>
-                                        <p class="text-muted">
-                                            历史食客</p>
-                                    </a><a href="#" class="btn-box big span4"><i class="icon-user"></i><b>96</b>
-                                        <p class="text-muted">
-                                            今日食客</p>
-                                    </a><a href="#" class="btn-box big span4"><i class="icon-money"></i><b>15,152</b>
-                                        <p class="text-muted">
-                                            日均销售额</p>
-                                    </a>
-                                </div>
-                                <div class="btn-box-row row-fluid">
 
-
-
-
-                                </div>
-                            </div>
 
                             <!--/#btn-controls-->
                             <div class="module">
                                 <div class="module-head">
                                     <h3>
-                                        销售额</h3>
+                                        被推荐菜品排行</h3>
                                 </div>
                                 <div class="module-body">
                                   <div class="chart pie donut">
-                                    <div id="main" style="width: 900px;height:400px;"></div>
+                                    <div id="main" style="width: 800px;height:300px;"></div>
                                         <script type="text/javascript">
+                                        var canteen=[];
+                                        $.ajax({  
+                                        async:false,
+                                        url:"/dishRank",  
+                                        processData: false, 
+                                        type:'get',
+                                        success:function(data) {  
+                                            canteen=data;
+                                            
+                                        }
+                                    }); 
+                                    console.log(canteen);
                                             // 基于准备好的dom，初始化echarts实例
                                             var myChart = echarts.init(document.getElementById('main'));
 
                                             // 指定图表的配置项和数据
                                             var option = {
                                                 title: {
-                                                    text: '销售额趋势'
+
                                                 },
-                                                tooltip: {},
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    }
+                                                },
                                                 legend: {
-                                                    data:['销售额']
+                                                    data: ['被推荐次数']
+                                                },
+                                                toolbox: {
+                                                    show : true,
+                                                    feature : {
+                                                        mark : {show: true},
+                                                        dataView : {show: true, readOnly: false},
+
+                                                        restore : {show: true},
+                                                        saveAsImage : {show: true}
+                                                    }
+                                                },
+                                                grid: {
+                                                    left: '3%',
+                                                    right: '4%',
+                                                    bottom: '3%',
+                                                    containLabel: true
                                                 },
                                                 xAxis: {
-                                                    data: ["01月","02月","03月","04月","05月","06月","07月","08月","09月","10月","11月","12月"]
+                                                    type: 'value',
+                                                    boundaryGap: [0, 0.01]
                                                 },
-                                                yAxis: {},
-                                                series: [{
-                                                    name: '销售额',
-                                                    type: 'bar',
-                                                    data: [500, 520, 530, 510, 610, 620,720,820,780,700,608,600]
-                                                }]
+                                                yAxis: {
+                                                    type: 'category',
+                                                    //data: [canteen[4].restName+":"+canteen[4].dishName,canteen[3].restName+":"+canteen[3].dishName,canteen[2].restName+":"+canteen[2].dishName,canteen[1].restName+":"+canteen[1].dishName,canteen[0].restName+":"+canteen[0].dishName]
+                                                    data:['预留','预留','预留',canteen[1].restName+":"+canteen[1].dishName,canteen[0].restName+":"+canteen[0].dishName]
+                                                },
+                                                series: [
+                                                    {
+                                                        name: '被推荐次数',
+                                                        type: 'bar',
+                                                        //data: [canteen[4].count, canteen[3].count, canteen[2].count, canteen[1].count, canteen[0].count]
+                                                        data:[0,0,0,canteen[1].count, canteen[0].count]
+                                                    }
+
+                                                ]
                                             };
 
-                                            // 使用刚指定的配置项和数据显示图表。
-                                            myChart.setOption(option);
+
+	                                             myChart.setOption(option)
+
+
                                         </script>
                                   </div>
-                              </div>
+                                </div>
                             </div>
 
+
+                            <div class="module">
+                                <div class="module-head">
+                                    <h3>
+                                        本店被推荐菜品次数</h3>
+                                </div>
+                                <div class="module-body">
+                                  <div class="chart pie donut">
+                                    <div id="main2" style="width: 800px;height:300px;"></div>
+                                        <script type="text/javascript">
+                                            // 基于准备好的dom，初始化echarts实例
+                                            var myChart = echarts.init(document.getElementById('main2'));
+
+                                            // 指定图表的配置项和数据
+                                            var option = {
+                                                  title : {
+                                                      text: '本店被推荐菜品次数统计',
+                                                      subtext: '',
+                                                      x:'center'
+                                                  },
+                                                  tooltip : {
+                                                      trigger: 'item',
+                                                      formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                                  },
+                                                  legend: {
+                                                      orient : 'vertical',
+                                                      x : 'left',
+                                                      data:['1','2','3','4','5']
+                                                  },
+                                                  toolbox: {
+                                                      show : true,
+                                                      feature : {
+                                                          mark : {show: true},
+                                                          dataView : {show: true, readOnly: false},
+                                                          magicType : {
+                                                              show: true,
+                                                              type: ['pie', 'funnel'],
+                                                              option: {
+                                                                  funnel: {
+                                                                      x: '25%',
+                                                                      width: '50%',
+                                                                      funnelAlign: 'left',
+                                                                      max: 1548
+                                                                  }
+                                                              }
+                                                          },
+                                                          restore : {show: true},
+                                                          saveAsImage : {show: true}
+                                                      }
+                                                  },
+                                                  calculable : true,
+                                                  series : [
+                                                      {
+                                                          name:'次数',
+                                                          type:'pie',
+                                                          radius : '55%',
+                                                          center: ['50%', '60%'],
+                                                          data:[
+                                                              {value:335, name:'1'},
+                                                              {value:310, name:'2'},
+                                                              {value:234, name:'3'},
+                                                              {value:135, name:'4'},
+                                                              {value:1548, name:'5'}
+                                                          ]
+                                                      }
+                                                  ]
+                                              };
+
+
+
+	                                             myChart.setOption(option)
+
+
+                                        </script>
+                                  </div>
+                                </div>
+                            </div>
+
+
+                            <div class="module">
+                                <div class="module-head">
+                                    <h3>
+                                        各个问题用户回答情况</h3>
+                                </div>
+                                <div class="module-body">
+                                  <div class="chart pie donut">
+                                    <div id="main3" style="width: 800px;height:300px;"></div>
+                                        <script type="text/javascript">
+                                            // 基于准备好的dom，初始化echarts实例
+                                            var myChart = echarts.init(document.getElementById('main3'));
+
+                                            // 指定图表的配置项和数据
+                                            var option = {
+                                                tooltip : {
+                                                    trigger: 'axis',
+                                                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                                                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                                    }
+                                                },
+                                                toolbox: {
+                                                    show : true,
+                                                    feature : {
+                                                        mark : {show: true},
+                                                        dataView : {show: true, readOnly: false},
+
+                                                        restore : {show: true},
+                                                        saveAsImage : {show: true}
+                                                    }
+                                                },
+                                                legend: {
+                                                    data:['否', '是']
+                                                },
+                                                grid: {
+                                                    left: '3%',
+                                                    right: '4%',
+                                                    bottom: '3%',
+                                                    containLabel: true
+                                                },
+                                                xAxis : [
+                                                    {
+                                                        type : 'value'
+                                                    }
+                                                ],
+                                                yAxis : [
+                                                    {
+                                                        type : 'category',
+                                                        axisTick : {show: false},
+                                                        data : ['不如这顿来点面条？','问题二不如这顿来点面条？','问题三问题二不如这顿来点面条','问题四','问题五']
+                                                    }
+                                                ],
+                                                series : [
+
+                                                    {
+                                                        name:'是',
+                                                        type:'bar',
+                                                        stack: '总量',
+                                                        label: {
+                                                            normal: {
+                                                                show: true
+                                                            }
+                                                        },
+                                                        data:[120, 102, 141, 174, 150]
+                                                    },
+                                                    {
+                                                        name:'否',
+                                                        type:'bar',
+                                                        stack: '总量',
+                                                        label: {
+                                                            normal: {
+                                                                show: true,
+
+                                                            }
+                                                        },
+                                                        data:[-120, -132, -101, -134, -130]
+                                                    }
+                                                ]
+                                            };
+
+
+                                               myChart.setOption(option)
+
+
+                                        </script>
+                                  </div>
+                                </div>
+                            </div>
+
+
+                            <div class="module">
+                                <div class="module-head">
+
+                                    <h3>
+                                        店铺排行榜</h3>
+                                </div>
+                                <div class="module-body">
+
+                                    <div class="row clearfix" >
+
+                                		<div class="col-md-12 column" style="padding-left:50px;font-size:20px;margin:25px;">
+                                			<ol >
+                                				<li style="margin-bottom:10px">
+                                					小米米
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					瓦罐世家
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					莆田卤面
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					麻辣香锅
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					5
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                			   	6
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					7
+                                				</li>
+                                				<li style="margin-bottom:10px">
+                                					8
+                                				</li>
+                                			</ol>
+                                		</div>
+                                	</div>
+
+                              </div>
+                            </div>
 
                         </div>
                         <!--/.content-->
@@ -160,13 +401,6 @@
                 <p class="copyright">&copy; 爸爸饿了战队 </p>
             </div>
         </div>
-        <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
-        <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
-        <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-        <script src="scripts/common.js" type="text/javascript"></script>
 
 
 
