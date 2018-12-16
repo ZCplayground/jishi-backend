@@ -70,7 +70,7 @@ class BetaController extends Controller
                 $record = [];
                 $record['recordid'] = $records[$i]->id; // 存放record的主码
 
-                $question_id_list = $records[$i]->question_id_list;
+                /*$question_id_list = $records[$i]->question_id_list;
                 trim($question_id_list,"[]");
 
                 $question_id_list =explode(",",$question_id_list); // 把问题字符串处理成数组，存放问题id
@@ -110,7 +110,7 @@ class BetaController extends Controller
                     $one_dish['canteen'] = $rest_canteen;
 
                     $record['dish'.$ii] = $one_dish;
-                }
+                }*/
                 // 最终选择“带我走”的是那一个菜
                 $finalchoice = $records[$i]->finalchoice;
                 if(is_null($finalchoice)) // ($finalchoice == null)
