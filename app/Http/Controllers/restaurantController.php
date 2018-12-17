@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Models\Restaurantaccount;
+use App\Models\Restaurant;
 
 class RestaurantController extends Controller
 {
@@ -86,15 +88,15 @@ class RestaurantController extends Controller
     }
 
     public function logout(Request $request)
-    { // 前端发送 json 'id'=> userid
+    { // 前端发送 json 'id'=> restaurantid
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $user = User::where('id', $data['id'])->first();
-        if($user)
+        $restaurant = Restaurantaccount::where('id', $data['id'])->first();
+        if($restaurant)
         {
-            $user->time_out = time(); // token超时时间设定为当下时间，之后token验证必定超时，实现登出。
-            $user->save();
+            $restaurant->time_out = time(); // token超时时间设定为当下时间，之后token验证必定超时，实现登出。
+            $restaurant->save();
              // 成功登出返回http 200
             return response()->json([
                 'info' => 'logout success.'
@@ -102,11 +104,98 @@ class RestaurantController extends Controller
         }
         else
         {
-            //出错情况：userid 错误，返回http 400
+            //出错情况：restaurantid 错误，返回http 400
             return response()->json([
-                'info' => 'user id does not exist.'
+                'info' => 'restaurant id does not exist.'
             ], 400);
         }
     }
+
+    // 检测restaurant账户的token是否正确
+    protected function checkRestaurantToken(Request $request)
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $id = $data['id'];
+        $restaurant = Restaurantaccount::where('id', $id)->first();
+        $tokenResult = null;
+        if($request)
+        {
+            if($restaurant->token === $data['token'])
+            {
+                if((time() - $restaurant->time_out) > 0)
+                {
+                    $tokenResult = 'timeout'; // 长时间未操作，token超时，要重新登陆
+                }
+                $new_time_out = time() + 7200000; // 更新token时间，7200秒是两小时
+                $restaurant->time_out = $new_time_out; 
+                $restaurant->save();
+                $tokenResult = 'success'; // token验证成功并刷新时间，可以继续获得接口信息。
+            }
+            else 
+                $tokenResult  = 'tokenerror'; // token有误
+        }
+        else 
+            $tokenResult = 'iderror'; // restaurant id 有误
+        return $tokenResult;
+    }
+
+    public function analyseReport(Request $request)
+    {
+
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $id = $data['id'];
+
+        $tokenResult = RestaurantController::checkRestaurantToken($request);
+        if ($tokenResult == 'success')
+        {
+            $history = DB::select('select records.created_at as time  from restaurants,records, menus,dishes, restaurantaccounts where records.finalchoice = menus.dish_id AND menus.rest_id = restaurants.id AND restaurantaccounts.id ='.$id.' AND restaurants.id = restaurantaccounts.rest_id AND records.finalChoice = dishes.id');
+
+            $historyCount = count($history);
+            $todayCount = 0;
+
+            for ($ii=0; $ii<$historyCount; $ii++){
+                $timeRecord = strtotime($history[$ii]->time);
+                $timeToday = strtotime("today");
+                $timeTomorrow = strtotime("tomorrow");
+
+                if (($timeRecord>= $timeToday) && ($timeRecord <= $timeTomorrow))
+                {
+                    $todayCount +=1;
+                }
+            }
+
+            $globalHistory = DB::select('select max(restaurants.id) as restId,count(restaurants.id) as count from restaurants,records, menus,dishes where records.finalchoice = menus.dish_id AND menus.rest_id = restaurants.id AND records.finalChoice = dishes.id group by restaurants.id order by count(restaurants.id) desc');
+
+            // var_dump($globalHistory);
+
+            $restaurant = Restaurantaccount::where('id', $id)->first();
+            $rest_id = $restaurant->rest_id;
+            $restaurantRank = count($globalHistory) + 1;
+            
+            for ($ii=0;$ii<count($globalHistory); $ii++){
+                if ($globalHistory[$ii]->restId == $rest_id)
+                    $restaurantRank = $ii+1;
+            }
+
+            $restaurantCount = DB::table('restaurants')->count();
+
+            return ['historyCount' => $historyCount,
+                    'todayCount' => $todayCount,
+                    'rank' => $restaurantRank,
+                    'totalRestaurantCount' => $restaurantCount];
+        }
+        else{
+            return response()->json([
+                'info' => 'RestaurantId or token error.'
+            ], 200);
+        }
+
+    }
+
+
 
 }
