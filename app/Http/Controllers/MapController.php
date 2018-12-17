@@ -13,10 +13,32 @@ class MapController extends Controller
 {
     public function mapRequest()
     {
-    	$restaurants=Restaurant::select('id','name','longitude','latitude')->get();
-    	// $restaurants = trim($restaurants, "\xEF\xBB\xBF");
+    	$restaurants=Restaurant::select('id','name','canteen','longitude','latitude')->get();
+        
     	
-    	//返回所有商家的 {id,name,longitude,latitude},http 202
+    	//返回所有商家的 {id,name,canteen,longitude,latitude},http 202
+        foreach ($restaurants as $value) {
+            if($value["canteen"] == "丁香园一楼")
+            {
+                $value["canteen"] = '0';
+            }
+            elseif ($value["canteen"] == "丁香园二楼") {
+                $value["canteen"] = '1';
+            }
+            elseif ($value["canteen"] == "京元食堂") {
+                $value["canteen"] = '2';
+            }
+            elseif ($value["canteen"] == "玫瑰园一楼") {
+                $value["canteen"] = '3';
+            }
+            elseif ($value["canteen"] == "玫瑰园二楼") {
+                $value["canteen"] = '4';
+            }
+            elseif ($value["canteen"] == "朝阳餐厅") {
+                $value["canteen"] = '5';
+            }
+            
+        }
 
     	return response()->json(
     		$restaurants
