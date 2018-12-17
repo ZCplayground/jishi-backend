@@ -16,7 +16,7 @@ class CreateRestaurantaccountsTable extends Migration
         Schema::create('restaurantaccounts', function (Blueprint $table) {
             $table->increments('id');               // id      |商家的ID     |从1递增的正整数   |主码
             $table->integer('rest_id')->unsigned(); // rest_id |店铺id       |unsigned int    |外码，引用restaurants表的id字段
-            $table->string('tel')->unique();        // tel     |商家的电话号码|string          |登陆用，必须是唯一的
+            $table->string('tel')->unique()->nullable();        // tel     |商家的电话号码|string          |登陆用，必须是唯一的
             $table->string('passwd',1024);          // passwd  | 密码        |string          |原文长度6~18之间。加密后存放 
             $table->string('token')->nullable();    // token   | 标记        |string          |每当成功登陆后，后端生成随机数存放到token字段，发送给前端。每次前端有新的操作时，都要发送token到后台验证。  
             $table->bigInteger('time_out');         //time_out |token过期时间 |string，date形式。

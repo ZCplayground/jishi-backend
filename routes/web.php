@@ -89,3 +89,5 @@ Route::get('/Merchant_menu','PagesController@menu')->name('Merchant_menu');
 // 商家注册界面
 Route::get('/Merchant_register','PagesController@register')->name('Merchant_register');
 
+
+Route::post('/Merchant_login','RestaurantController@login')->name('Merchant_login');

@@ -66,7 +66,7 @@ class StaticPagesController extends Controller
     {
         $token = createtoken();
 
-        $data['tel'] = 111111;
+        $data['tel'] = null;
         $data['passwd'] = 123456;
         // 正确情况：成功注册
         $user = Restaurantaccount::create([ // 存入数据库
