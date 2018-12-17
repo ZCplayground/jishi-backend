@@ -89,8 +89,8 @@
                                 <div class="container-fluid" >
                                 <div>
                                     <ul class="nav navbar-nav" >
-                                        <li style="font-size:16px"><a href="{{ URL::route('Merchant_menulist')}}">菜品查看</a></li>
-                                        <li style="border-bottom:1px solid #000000;font-size:16px"><a href="#">新菜品提交</a></li>
+                                        <li style="border-bottom:1px solid #000000;font-size:16px"><a href="#">菜品查看</a></li>
+                                        <li style="font-size:16px"><a href="{{ URL::route('Merchant_menu')}}">新菜品提交</a></li>
                                     </ul>
                                 </div>
                                 </div>
@@ -100,97 +100,68 @@
               								<h3>新菜品提交</h3>
               							</div>
                             -->
-
-
-              							<div class="module-body">
-
-              									<br />
-
-              									<form class="form-horizontal row-fluid">
-
-                                      <div class="control-group">
-                  											<label class="control-label" for="basicinput">菜品快照：</label>
-                  											<div class="controls">
-                                          <div class="fileinput-new thumbnail"  style=" width: 200px; height: 150px;">
-                                            <img src="images/food.jpg" alt=""  />
-                                          </div>
-                                          <br>
-                                          <input type=button value="更改快照" onclick=j.click() style="  padding: 4px 10px;     background-color: #f5f5f5; font-weight:400;    font-size: 13px;  border: 1px solid transparent;" >
-                                          <input type=file name=j style="display: none;" onchange="ye.value=value"><input name=ye style="border: 1px ">
-
-                  											</div>
-                  										</div>
-
-
-
-              										<div class="control-group">
-              											<label class="control-label" for="basicinput">商品名称：</label>
-              											<div class="controls">
-              												<input type="text" id="basicinput" placeholder="请输入菜品名" class="span8">
-
-              											</div>
-              										</div>
-
-
-
-              										<div class="control-group">
-              											<label class="control-label" for="basicinput">菜品加工时间：</label>
-              											<div class="controls">
-              												<input data-title="A tooltip for the input" type="text" placeholder="请输入加工时间(分钟)" data-original-title="" class="span8 tip">
-              											</div>
-              										</div>
-
-
-
-              										<div class="control-group">
-              											<label class="control-label" for="basicinput">菜品价格</label>
-              											<div class="controls">
-              												<div class="input-append">
-              													<input type="text" placeholder="10" class="span8"><span class="add-on">元</span>
-              												</div>
-              											</div>
-              										</div>
-
-
-              										<div class="control-group">
-              											<label class="control-label" for="basicinput">所属食品类</label>
-              											<div class="controls">
-              												<select tabindex="1" data-placeholder="主食" class="span8">
-              													<option value="">主食</option>
-                                        <option value="Category 1">套餐</option>
-              													<option value="Category 2">小炒</option>
-              													<option value="Category 3">汤类</option>
-              													<option value="Category 4">面类</option>
-
-              												</select>
-              											</div>
-              										</div>
-
-                                  <div class="control-group">
-                                    <label class="control-label" for="basicinput">菜品原材料：</label>
-                                    <div class="controls">
-                                      <textarea class="span8" rows="5"></textarea>
-                                    </div>
-                                  </div>
-
-              										<div class="control-group">
-              											<label class="control-label" for="basicinput">菜品介绍：</label>
-              											<div class="controls">
-              												<textarea class="span8" rows="5"></textarea>
-              											</div>
-              										</div>
-
-              										<div class="control-group">
-              											<div class="controls">
-              												<button class="btn"><a href="{{ URL::route('Merchant_menuwait')}}">提交菜品</button>
-              											</div>
-              										</div>
-                                  <br>
-              									</form>
-              							</div>
-              						</div>
-
-
+                            <div style="margin:20px">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>菜品ID</th>
+                                    <th>菜品名称</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>可乐鸡饭</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>手撕鸡饭</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>鱼香肉丝饭</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>004</td>
+                                    <td>还有什么饭呀</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>005</td>
+                                    <td>……</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>006</td>
+                                    <td>……</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>007</td>
+                                    <td>……</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>008</td>
+                                    <td>……</td>
+                                    <td><button class="btn">修改</button></td>
+                                    <td><button class="btn">删除</button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
 
 
                         </div>
@@ -213,7 +184,7 @@
         <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-
+        <script src="scripts/common.js" type="text/javascript"></script>
 
 
 

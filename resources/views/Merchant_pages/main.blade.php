@@ -11,6 +11,12 @@
         <link type="text/css" href="css/theme.css" rel="stylesheet">
         <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
         <script src="js/echarts.min.js"type="text/javascript"></script>
+        <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
+        <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+        <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
 
     </head>
     <body>
@@ -80,7 +86,24 @@
                         <!--/.sidebar-->
                     </div>
                     <!--/.span3-->
-
+                    <script>
+                            var MerchantData=[];
+                            function IntoJson(){
+                            return JSON.stringify({ "restId":1 });
+                            };
+                            console.log(IntoJson());
+                            $.ajax({
+                            async:false,
+                            url:"/?",  
+                            processData: false, 
+                            type:'post',
+                            dataType:"json",
+                            data:IntoJson(),
+                            success:function(data) {
+                        }
+                        });
+                    </script>
+                    
                     <div class="span9">
                         <div class="content">
                           <div class="module">
@@ -92,7 +115,6 @@
                     				</p>
                             </div>
                     			</div>
-
                             <div class="btn-controls">
                                 <div class="btn-box-row row-fluid">
                                     <a href="#" class="btn-box big span4"><i class=" icon-user"></i><b>22，333</b>
@@ -199,13 +221,7 @@
                 <p class="copyright" >&copy; 爸爸饿了战队 </p>
             </div>
         </div>
-        <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
-        <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
-        <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-        <script src="scripts/common.js" type="text/javascript"></script>
+
 
 
 

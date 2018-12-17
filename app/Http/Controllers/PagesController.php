@@ -54,5 +54,15 @@ class PagesController extends Controller
      {
      	return view('Merchant_pages/register');
      }
+    //菜品显示界面
+    public function menulist()
+    {
+        return view('Merchant_pages/menu_list');
+    }
+    //菜品显示界面
+    public function menuwait()
+    {
+        return view('Merchant_pages/menu_wait');
+    }
 
 }
