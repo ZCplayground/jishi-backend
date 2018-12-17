@@ -191,7 +191,7 @@ class RestaurantController extends Controller
         else{
             return response()->json([
                 'info' => 'RestaurantId or token error.'
-            ], 200);
+            ], 400);
         }
 
     }
