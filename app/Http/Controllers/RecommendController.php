@@ -150,7 +150,27 @@ class RecommendController extends Controller
                 $recommend['restName'] = $restName;
                 $recommend['dishName'] = $dishName;
                 $recommend['canteen'] = $canteen;
-    
+                // 加个整数
+                if($recommend["canteen"] == "丁香园一楼")
+                {
+                    $recommend["canteenid"] = '0';
+                }
+                elseif ($recommend["canteen"] == "丁香园二楼") {
+                    $recommend["canteenid"] = '1';
+                }
+                elseif ($recommend["canteen"] == "京元食堂") {
+                    $recommend["canteenid"] = '2';
+                }
+                elseif ($recommend["canteen"] == "玫瑰园一楼") {
+                    $recommend["canteenid"] = '3';
+                }
+                elseif ($recommend["canteen"] == "玫瑰园二楼") {
+                    $recommend["canteenid"] = '4';
+                }
+                elseif ($recommend["canteen"] == "朝阳餐厅") {
+                    $recommend["canteenid"] = '5';
+                }
+
                 $recommends['dish'.$ii] = $recommend;
                 
                 if ($ii != $dishesNum - 1)
