@@ -59,7 +59,7 @@ class BetaController extends Controller
         {
             // token验证成功
             
-            $records = Record::where('user_id', $data['id'])-whereNull('finalchoice')->get(); // 到数据库中查到这个用户所有的推荐记录
+            $records = Record::where('user_id', $data['id'])->whereNull('finalchoice')->get(); // 到数据库中查到这个用户所有的推荐记录
             $num = count($records); // 推荐记录的总数
 
             $history = [];
