@@ -113,18 +113,17 @@ class BetaController extends Controller
                     $record['dish'.$ii] = $one_dish;
                 }*/
                 // 最终选择“带我走”的是那一个菜
-                $finalchoice = $records[$i]->finalchoice;
-                if(is_null($finalchoice)) // ($finalchoice == null)
-                {
-                    $finalchoice = "empty";
-                }
-                else 
-                {
-                    $dish_id = $finalchoice;
-                    $dish = Dish::where('id', $dish_id)->first();
-                    $finalchoice = $dish->name;
-                }
-                $record['finalchoice'] = $finalchoice;
+                $finalchoice = $records[$i]->finalchoice; 
+
+                $dish_id = $finalchoice;
+                $dish = Dish::where('id', $dish_id)->first();
+                $menu_entry = Menu::where('dish_id', $dish_id)->first();
+                $rest_id = $menu_entry->rest_id;
+                $rest = Restaurant::where('id', $rest_id)->first();
+
+                $record['finalchoice'] = $dish->name;
+                $record['restName'] = $rest->name;
+                $record['canteen'] = $rest->canteen;
 
                 // 好评或差评
                 $judge = $records[$i]->judge;
