@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Restaurantaccount;
 use App\Models\Restaurant;
+use App\Models\Dish;
+use App\Models\Menu;
 
 class RestaurantController extends Controller
 {
@@ -120,7 +122,7 @@ class RestaurantController extends Controller
         $id = $data['id'];
         $restaurant = Restaurantaccount::where('id', $id)->first();
         $tokenResult = null;
-        if($request)
+        if($restaurant)
         {
             if($restaurant->token === $data['token'])
             {
@@ -196,6 +198,196 @@ class RestaurantController extends Controller
 
     }
 
+    public function dishInfo(Request $request){
+        $data = $request->getContent();
+        $data = json_decode($data, true);
 
+        $id = $data['id'];
+
+        $tokenResult = RestaurantController::checkRestaurantToken($request);
+        if ($tokenResult == 'success')
+        {
+            
+            $restaurant = Restaurantaccount::where('id', $id)->first();
+            $rest_id = $restaurant->rest_id;
+            $dishes = Menu::where('rest_id',$rest_id)
+                        ->join('dishes','menus.dish_id','=','dishes.id')
+                        ->get();
+            $response =[];
+            $response['dishNum'] = count($dishes);
+            if ($dishes){
+                for ($i=0;$i<count($dishes);$i++){
+                    $response['dishes']['dish'.$i]['dishId'] = $dishes[$i]->dish_id;
+                    $response['dishes']['dish'.$i]['dishName'] = $dishes[$i]->name;
+                    // maybe need to return taste
+                }
+                return $response;
+            }
+            else{
+                return ['dishNum' =>0];
+            }
+        }
+        else{
+            return response()->json([
+                'info' => 'RestaurantId or token error.'
+            ], 400);
+        }
+    }
+
+
+    public function dishAdd(Request $request){
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $id = $data['id'];
+
+        $tokenResult = RestaurantController::checkRestaurantToken($request);
+        if ($tokenResult == 'success')
+        {
+            /*
+            increments('id');
+            string('name');  
+            boolean('spicy')->nullable();
+            boolean('balance')->nullable();
+            boolean('oil')->nullable();
+            boolean('seafood')->nullable();
+            boolean('rice')->nullable();
+            boolean('noodles')->nullable();
+            boolean('mifen')->nullable();
+            double('satisfaction')->nullable();
+            */
+            $restaurant = Restaurantaccount::where('id', $id)->first();
+            $rest_id = $restaurant->rest_id;
+            $dish = Dish::create([ // 存入数据库
+                    'name' => $data['name']
+                    // 'spicy' => $data['spicy'],
+                    // 'balance' => true,
+                    // 'oil' => true,
+                    // 'seafood' => true,
+                    // 'rice' => true,
+                    // 'noodles' => true,
+                    // 'mifen' => true,
+                ]);
+            
+
+            $dish_menu = Menu::create([
+                'rest_id'=>$rest_id,
+                'dish_id'=>$dish->id
+            ]);
+            return $dish;
+        }
+        else{
+            return response()->json([
+                'info' => 'RestaurantId or token error.'
+            ], 400);
+        }
+    }
+
+
+    public function dishRemove(Request $request){
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $id = $data['id'];
+        $dishId = $data['dishId'];
+
+        $tokenResult = RestaurantController::checkRestaurantToken($request);
+        if ($tokenResult == 'success')
+        {
+            $dish = Dish::where('id',$dishId)->get();
+            if ($dish)
+            {
+                $restaurant = Restaurantaccount::where('id',$id)->first();
+                if (!($restaurant)){
+                    return response()->json([
+                        'info' => 'RestaurantId error.'
+                    ], 400);   
+                }
+                $menu = Menu::where('rest_id',$restaurant->rest_id)
+                        ->where('dish_id',$dishId)->first();
+                if (!($menu)){
+                    return response()->json([
+                        'info' => 'RestaurantId or DishId may be error.'
+                    ], 400);   
+                }
+                
+                Menu::where('rest_id',$restaurant->rest_id)
+                ->where('dish_id',$dishId)->delete();
+                Dish::where('id',$dishId)->delete();
+                
+                return ['info'=>'Delete success.','dish'=>$dish];
+            }
+            else 
+            {
+                return response()->json([
+                    'info' => 'DishId error.'
+                ], 400);   
+            }
+        }
+        else{
+            return response()->json([
+                'info' => 'RestaurantId or token error.'
+            ], 400);
+        }
+    }
+
+    public function dishAlter(Request $request){
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $id = $data['id'];
+        $dishId = $data['dishId'];
+
+        $tokenResult = RestaurantController::checkRestaurantToken($request);
+        if ($tokenResult == 'success')
+        {
+            $restaurant = Restaurantaccount::where('id',$id)->first();
+            if (!($restaurant)){
+                return response()->json([
+                    'info' => 'RestaurantId error.'
+                ], 400);   
+            }
+            $menu = Menu::where('rest_id',$restaurant->rest_id)
+                    ->where('dish_id',$dishId)->first();
+            if (!($menu)){
+                return response()->json([
+                    'info' => 'RestaurantId or DishId may be error.'
+                ], 400);   
+            }
+
+            $dish = Dish::where('id',$dishId)->first();
+            if ($dish == null){
+                return response()->json(
+                    ['info' => "Modify failed"],401
+                );    
+            }
+
+
+            $num = Dish::where('id',$dishId)
+                        ->update(['name' => ((array_key_exists('name',$data))? $data['name']:$dish->name),
+                        'spicy' => ((array_key_exists('spicy',$data))? $data['spicy']: $dish->spicy),
+                        'balance' => ((array_key_exists('balance',$data))? $data['balance']: $dish->balance),
+                        'oil' => ((array_key_exists('oil',$data))? $data['oil']: $dish->oil),
+                        'seafood' => ((array_key_exists('seafood',$data))? $data['seafood']: $dish->seafood),
+                        'rice' => ((array_key_exists('rice',$data))? $data['rice']: $dish->rice),
+                        'noodles' => ((array_key_exists('noodles',$data))? $data['noodles']: $dish->noodles),
+                        'mifen' =>((array_key_exists('mifen',$data))? $data['mifen']: $dish->mifen),
+                    ]);
+            $dishNew = Dish::where('id',$dishId)->first();
+            
+            if ($dishNew == null){
+                return response()->json(
+                    ['info' => "Modify failed"],401
+                );    
+            }
+           
+            return $dishNew;
+        }
+        else{
+            return response()->json([
+                'info' => 'RestaurantId or token error.'
+            ], 400);
+        }
+    }
 
 }

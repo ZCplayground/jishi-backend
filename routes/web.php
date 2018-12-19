@@ -98,6 +98,16 @@ Route::get('/Merchant_menuwait','PagesController@menuwait')->name('Merchant_menu
 
 //商家登录
 Route::post('/Merchant_login','RestaurantController@login')->name('Merchant_login');
+//商家登出
 Route::post('/Merchant_logout','RestaurantController@logout')->name('Merchant_logout');
+//商家分析报告
 Route::post('/analyse_report','RestaurantController@analyseReport')->name('analyseReport');
+//商家菜品总览
+Route::post('/dish_info','RestaurantController@dishInfo')->name('dish_info');
+//商家添加菜品
+Route::post('/dish_add','RestaurantController@dishAdd')->name('dish_add');
+//商家修改菜品
+Route::post('/dish_alter','RestaurantController@dishAlter')->name('dish_alter');
+//商家删除菜品
+Route::post('/dish_remove','RestaurantController@dishRemove')->name('dish_remove');
 
