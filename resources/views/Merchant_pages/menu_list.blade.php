@@ -11,14 +11,14 @@
         <link type="text/css" href="css/theme.css" rel="stylesheet">
         <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
         <script src="js/echarts.min.js"type="text/javascript"></script>
-
+        <script src="js/global.js"type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="main.html">即食商家端 </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ URL::route('Merchant_main')}}">即食商家端 </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav nav-icons">
                             <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>
@@ -101,7 +101,7 @@
               							</div>
                             -->
                             <div style="margin:20px">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="dish-table">
                                 <thead>
                                 <tr>
                                     <th>菜品ID</th>
@@ -111,6 +111,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <!--
                                 <tr>
                                     <td>001</td>
                                     <td>可乐鸡饭</td>
@@ -159,6 +160,7 @@
                                     <td><button class="btn">修改</button></td>
                                     <td><button class="btn">删除</button></td>
                                 </tr>
+                            -->
                                 </tbody>
                             </table>
                             </div>
@@ -185,7 +187,68 @@
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
         <script src="scripts/common.js" type="text/javascript"></script>
-
+        <script>
+            var MerchantData=[];
+            function IntoJson(){
+            return JSON.stringify({ "id":localStorage.getItem("id"),"token":localStorage.getItem("restoken")});
+            };
+            console.log(IntoJson());
+             //显示菜单
+            $.ajax({
+                async:false,
+                url:"/dish_info",  
+                processData: false, 
+                type:'post',
+                dataType:"json",
+                data:IntoJson(),
+                success:function(data) {
+                    MerchantData=data;
+                    console.log(MerchantData);
+                }
+            });
+            for(var i=0;i<MerchantData.dishNum;i++){
+                var str="<tr><td style=\"display:none\">"+MerchantData.dishes['dish'+i].dishId+"</td><td>"+(i+1)+"</td><td>"+MerchantData.dishes['dish'+i].dishName+"</td><td><button class=\"btn\" onclick=\"altdish(this)\">修改</button></td><td><button class=\"btn\" onclick=\"deldish(this)\">删除</button></td></tr>";
+                $("#dish-table tbody").append(str);
+            }
+            //修改
+            function altdish(obj){
+                var node=obj.parentNode.parentNode;
+                var id=node.cells[0].innerHTML;
+                var name=prompt("请输入修改后的名称：");
+                $.ajax({
+                    async:false,
+                    url:"/dish_alter",  
+                    processData: false, 
+                    type:'post',
+                    dataType:"json",
+                    data:JSON.stringify({ "id":localStorage.getItem("id"),"token":localStorage.getItem("restoken"),"dishId":id,"name":name}),
+                    success:function(data) {
+                    alert("修改成功！")
+                    console.log(data);
+                    location.reload(true);   
+                    }
+                }); 
+            }
+            //删除
+            function deldish(obj){
+                var node=obj.parentNode.parentNode;
+                var id=node.cells[0].innerHTML;
+                console.log(id);
+                $.ajax({
+                    async:false,
+                    url:"/dish_remove",  
+                    processData: false, 
+                    type:'post',
+                    dataType:"json",
+                    data:JSON.stringify({ "id":localStorage.getItem("id"),"token":localStorage.getItem("restoken"),"dishId":id}),
+                    success:function(data) {
+                    alert("删除成功！")
+                    console.log(data);
+                    location.reload(true);
+                    }
+                }); 
+            }
+        </script>
 
 
         </script>

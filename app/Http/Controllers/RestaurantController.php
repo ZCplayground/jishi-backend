@@ -23,16 +23,27 @@ class RestaurantController extends Controller
 
             if ($restaurant)// 手机号存在于数据库，密码符合邮箱，且正确
             {
-                $restaurant = Restaurantaccount::where('tel', $data['id'])->first(); 
+                $restaurantAccount = Restaurantaccount::where('tel', $data['id'])->first(); 
 
-                $restaurant->token = createtoken(); 
+                $restaurantAccount->token = createtoken(); 
                 $time_out = strtotime("+1 year");
-                $restaurant->time_out = $time_out; 
-                $restaurant->save();
+                $restaurantAccount->time_out = $time_out; 
+                $restaurantAccount->save();
+
+                $restaurant = Restaurant::where('id',$restaurantAccount->rest_id)->first();
+                $restName = null;
+                if ($restaurant){
+                    $restName = $restaurant->name;
+                }
+                else {
+                    $restName = "Restaurant you binds may be not exists";
+                }
+
                 return response()->json([
                     'info' => 'login success.',
-                    'id' => $restaurant->id,
-                    'token' => $restaurant->token,
+                    'id' => $restaurantAccount->id,
+                    'token' => $restaurantAccount->token,
+                    'name' => $restName,
                     "firstLogin" => 'false',
                 ], 200);
             }
@@ -48,25 +59,35 @@ class RestaurantController extends Controller
             $restaurant = Restaurantaccount::where('id',$data['id'])->first();
             if ($restaurant)
             {
-                $restaurant = Restaurantaccount::where('id', $data['id'])
+                $restaurantAccount = Restaurantaccount::where('id', $data['id'])
                     ->where('passwd', bin2hex(hash('sha256',$data['passwd'], true)))
                     ->first(); 
-                if ($restaurant)
+                if ($restaurantAccount)
                 {
-                    $restaurant->token = createtoken(); 
+                    $restaurantAccount->token = createtoken(); 
                     $time_out = strtotime("+1 year");
-                    $restaurant->time_out = $time_out; 
-                    $restaurant->save();
-                    if ($restaurant->tel!=null)//todo:?
+                    $restaurantAccount->time_out = $time_out; 
+                    $restaurantAccount->save();
+                    if ($restaurantAccount->tel!=null)//todo:?
                         $firstLogin = false;
                     else
                         $firstLogin = true;
 
+                    $restaurant = Restaurant::where('id',$restaurantAccount->rest_id)->first();
+                    $restName = null;
+                    if ($restaurant){
+                        $restName = $restaurant->name;
+                    }
+                    else {
+                        $restName = "Restaurant you binds may be not exists";
+                    }
+        
                     
                     return response()->json([
                         'info' => 'login success.',
-                        'id' => $restaurant->id,
-                        'token' => $restaurant->token,
+                        'id' => $restaurantAccount->id,
+                        'token' => $restaurantAccount->token,
+                        'name' => $restName,
                         "firstLogin" => $firstLogin,
                     ], 200);
                 }

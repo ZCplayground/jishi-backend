@@ -17,14 +17,14 @@
         <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-        <script src="scripts/common.js" type="text/javascript"></script>
+        <script src="js/global.js"type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="main.html">即食商家端 </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ URL::route('Merchant_main')}}">即食商家端 </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav nav-icons">
                             <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>

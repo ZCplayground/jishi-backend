@@ -5,6 +5,8 @@
   <title>登录界面</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/global.js"type="text/javascript"></script>
+  <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
 </head>
 <body>
   <div class="wrap login_wrap">
@@ -20,10 +22,10 @@
           <form  action="#" method="post">
             {{ csrf_field() }}
             <div class="form_text_ipt">
-              <input type="text" name="phonenumber" placeholder="手机号">
+              <input type="text" name="phonenumber" placeholder="手机号" id="phone">
             </div>
             <div class="form_text_ipt">
-              <input name="password" type="password" placeholder="密码">
+              <input name="password" type="password" placeholder="密码" id="pas">
             </div>
 
             <div class="form_check_ipt">
@@ -37,7 +39,7 @@
             </div>
 
             <div class="form_btn">
-              <button type="button" onclick="javascript:window.location.href='main.html'">登 录</button>
+              <button type="button" onclick="login()">登 录</button>
             </div>
             <div class="form_reg_btn">
               <span>还没有帐号？</span><a href="{{ URL::route('Merchant_register')}}">马上注册</a>
@@ -54,6 +56,37 @@
     </div>
 
   </div>
-  <script type="text/javascript" src="js/main.js" ></script>
+  <script>
+    function login(){
+      var phone=document.getElementById("phone").value;
+      var pas=document.getElementById("pas").value;
+      function IntoJson(){
+        return JSON.stringify({ "id":phone,"passwd":pas});
+        };
+        
+      $.ajax({
+          async:false,
+          url:"/Merchant_login",  
+          processData: false, 
+          type:'post',
+          dataType:"json",
+          data:IntoJson(),
+          success:function(data) {
+              restaurantId=data.id;
+              token=data.token;
+              restaurantName=data.name;
+              localStorage.setItem("id",data.id);
+              localStorage.setItem("restoken",data.token);
+              localStorage.setItem("name",data.name);
+              console.log(data.token);
+              console.log(localStorage.getItem("restoken"));
+              window.location.href="/Merchant_main"; 
+          },
+          error:function(data){
+            alert("输入错误！请重新输入");
+          }
+        });
+    }
+  </script>
 </body>
 </html>

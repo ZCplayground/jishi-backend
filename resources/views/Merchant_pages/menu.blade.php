@@ -11,14 +11,14 @@
         <link type="text/css" href="css/theme.css" rel="stylesheet">
         <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
         <script src="js/echarts.min.js"type="text/javascript"></script>
-
+        <script src="js/global.js"type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="main.html">即食商家端 </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ URL::route('Merchant_main')}}">即食商家端 </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav nav-icons">
                             <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>
@@ -182,7 +182,7 @@
 
               										<div class="control-group">
               											<div class="controls">
-              												<button class="btn"><a href="{{ URL::route('Merchant_menuwait')}}">提交菜品</button>
+              												<button class="btn" onclick="adddish()">提交菜品</button>
               											</div>
               										</div>
                                   <br>
@@ -213,9 +213,22 @@
         <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-
-
-
+        <script>
+            function adddish(){
+                var name=document.getElementById("basicinput").value;
+                $.ajax({
+                async:false,
+                url:"/dish_add",  
+                processData: false, 
+                type:'post',
+                dataType:"json",
+                data:JSON.stringify({ "id":localStorage.getItem("id"),"token":localStorage.getItem("restoken"),"name":name}),
+                success:function(data) {
+                    console.log(data);
+                    window.location.href="/Merchant_menuwait"; 
+                }
+            });
+            }
 
         </script>
 
