@@ -17,7 +17,7 @@
         <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-
+        <script src="js/global.js"type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -48,7 +48,7 @@
                                     <li><a href="#">4</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">您好，小米米商铺</a></li>
+                            <li><a href="#">您好，<span id="Rname1"></span>商铺</a></li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="images/user.png" class="nav-avatar" />
                                 <b class="caret"></b></a>
@@ -86,30 +86,14 @@
                         <!--/.sidebar-->
                     </div>
                     <!--/.span3-->
-                    <script>
-                            var MerchantData=[];
-                            function IntoJson(){
-                            return JSON.stringify({ "restId":1 });
-                            };
-                            console.log(IntoJson());
-                            $.ajax({
-                            async:false,
-                            url:"/?",  
-                            processData: false, 
-                            type:'post',
-                            dataType:"json",
-                            data:IntoJson(),
-                            success:function(data) {
-                        }
-                        });
-                    </script>
+
                     
                     <div class="span9">
                         <div class="content">
                           <div class="module">
                     				<div class="jieshao" style="padding:30px;">
 
-                              <h3><img src="images/user.png" class="nav-avatar"  /> 您好！小米米老板</h3>
+                              <h3><img src="images/user.png" class="nav-avatar"  /> 您好！<span id="Rname"></span>老板</h3>
                     				<p>
                     					店铺老板 | 福州大学玫瑰园餐厅二楼 | 即食App VIP商铺
                     				</p>
@@ -117,13 +101,13 @@
                     			</div>
                             <div class="btn-controls">
                                 <div class="btn-box-row row-fluid">
-                                    <a href="#" class="btn-box big span4"><i class=" icon-user"></i><b>22，333</b>
+                                    <a href="#" class="btn-box big span4"><i class=" icon-user"></i><b id="history">22，333</b>
                                         <p class="text-muted">
                                             历史食客</p>
-                                    </a><a href="#" class="btn-box big span4"><i class="icon-user"></i><b>96</b>
+                                    </a><a href="#" class="btn-box big span4"><i class="icon-user"></i><b id="today">96</b>
                                         <p class="text-muted">
                                             今日食客</p>
-                                    </a><a href="#" class="btn-box big span4"><i class="icon-money"></i><b>8/50</b>
+                                    </a><a href="#" class="btn-box big span4"><i class="icon-money"></i><b id="rank">8/50</b>
                                         <p class="text-muted">
                                             福大食堂店铺排名</p>
                                     </a>
@@ -222,7 +206,30 @@
             </div>
         </div>
 
-
+        <script>
+            var MerchantData=[];
+            function IntoJson(){
+            return JSON.stringify({ "id":localStorage.getItem("id"),"token":localStorage.getItem("restoken")});
+            };
+            console.log(IntoJson());
+            $.ajax({
+                async:false,
+                url:"/analyse_report",  
+                processData: false, 
+                type:'post',
+                dataType:"json",
+                data:IntoJson(),
+                success:function(data) {
+                    MerchantData=data;
+                    console.log(MerchantData);
+                }
+            });
+            document.getElementById("Rname1").innerHTML=localStorage.getItem("name");
+            document.getElementById("Rname").innerHTML=localStorage.getItem("name");
+            document.getElementById("history").innerHTML=MerchantData.historyCount;
+            document.getElementById("today").innerHTML=MerchantData.todayCount;
+            document.getElementById("rank").innerHTML=MerchantData.rank+"/"+MerchantData.totalRestaurantCount;
+        </script>
 
 
         </script>
